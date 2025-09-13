@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Suspense, useRef } from 'react';
+import React, { Suspense, useRef, useEffect, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { useGLTF, Environment } from '@react-three/drei';
 import * as THREE from 'three';
@@ -77,10 +77,36 @@ interface Phone3DBackgroundProps {
 }
 
 export function Phone3DBackground({ className = "" }: Phone3DBackgroundProps) {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 640); // sm breakpoint
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Скрываем 3D модель на мобильных устройствах
+  if (isMobile) {
+    return null;
+  }
+
+  // Параметры для ПК (оригинальные)
+  const desktopConfig = {
+    position: [1.7, -0.2, 0] as [number, number, number],
+    rotation: [0.1, -0.2, 0.05] as [number, number, number],
+    scale: 2.5,
+    camera: { position: [0, 0, 5], fov: 50 }
+  };
+
   return (
     <div className={`absolute inset-0 ${className}`} style={{ zIndex: 1 }}>
       <Canvas
-        camera={{ position: [0, 0, 5], fov: 50 }}
+        camera={{ position: desktopConfig.camera.position as [number, number, number], fov: desktopConfig.camera.fov }}
         style={{ background: 'transparent' }}
       >
         <Suspense fallback={null}>
@@ -95,11 +121,11 @@ export function Phone3DBackground({ className = "" }: Phone3DBackgroundProps) {
           <pointLight position={[0, 0, 8]} intensity={1.5} color="#ffffff" />
           <pointLight position={[8, 3, 3]} intensity={1.2} color="#f59e0b" />
           
-          {/* Модель телефона */}
+          {/* Модель телефона только для ПК */}
           <PhoneModel 
-            position={[1.7, -0.2, 0]} 
-            rotation={[0.1, -0.2, 0.05]} 
-            scale={2.5} 
+            position={desktopConfig.position} 
+            rotation={desktopConfig.rotation} 
+            scale={desktopConfig.scale} 
           />
           
           {/* Окружение для лучшего освещения */}

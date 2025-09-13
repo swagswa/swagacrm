@@ -91,9 +91,24 @@ interface MagnifyingGlass3DBackgroundProps {
 
 export function MagnifyingGlass3DBackground({ className = "" }: MagnifyingGlass3DBackgroundProps) {
   const [isVisible, setIsVisible] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 640); // sm breakpoint
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  useEffect(() => {
+    // Скрываем IntersectionObserver на мобильных устройствах
+    if (isMobile) return;
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -116,7 +131,12 @@ export function MagnifyingGlass3DBackground({ className = "" }: MagnifyingGlass3
         observer.unobserve(currentContainer);
       }
     };
-  }, []);
+  }, [isMobile]);
+
+  // Скрываем 3D модель на мобильных устройствах
+  if (isMobile) {
+    return null;
+  }
 
   return (
     <div ref={containerRef} className={`absolute inset-0 ${className}`} style={{ zIndex: 1, pointerEvents: 'none' }}>
@@ -132,7 +152,7 @@ export function MagnifyingGlass3DBackground({ className = "" }: MagnifyingGlass3
           <pointLight position={[5, 5, 5]} intensity={1.5} color="#4f46e5" />
           <pointLight position={[-5, -5, 5]} intensity={1.2} color="#06b6d4" />
           
-          {/* Модель лупы */}
+          {/* Модель лупы только для ПК */}
           <MagnifyingGlassModel 
             position={[0, -0.2, 0]} 
             rotation={[0.2, 0.3, -0.1]} 

@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { X, Zap, Shield, Clock } from "lucide-react";
 import Link from "next/link";
-import { CheckCircle, Zap, Shield, Clock } from "lucide-react";
 
 const benefits = [
   { icon: Zap, text: "Настройка за 5 минут" },
@@ -11,7 +11,12 @@ const benefits = [
   { icon: Clock, text: "Поддержка 24/7" }
 ];
 
-export function FinalCTASection() {
+interface RegistrationModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export function RegistrationModal({ isOpen, onClose }: RegistrationModalProps) {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [telegram, setTelegram] = useState('');
@@ -53,6 +58,11 @@ export function FinalCTASection() {
         setPhone('');
         setTelegram('');
         setConsent(false);
+        // Закрываем модальное окно через 2 секунды
+        setTimeout(() => {
+          onClose();
+          setSubmitMessage('');
+        }, 2000);
       } else {
         setSubmitMessage(data.error || 'Произошла ошибка при отправке заявки');
       }
@@ -65,48 +75,31 @@ export function FinalCTASection() {
   };
 
   return (
-    <section className="py-12 sm:py-16 lg:py-24 text-white relative overflow-hidden">
-
-      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Main CTA */}
+    <AnimatePresence>
+      {isOpen && (
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="text-center mb-8 sm:mb-12 lg:mb-16"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          onClick={onClose}
         >
-          <motion.h2 
-            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 sm:mb-6 leading-tight px-4"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            viewport={{ once: true }}
-          >
-            Готовы к будущему без{" "}
-            <span className="text-red-500 smooth-bounce" style={{ display: 'inline-block' }}>потери клиентов</span>?
-          </motion.h2>
-          
-          <motion.p 
-            className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-300 mb-6 sm:mb-8 max-w-3xl mx-auto leading-relaxed px-4"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            viewport={{ once: true }}
-          >
-            Присоединяйтесь к{" "}
-            <span className="text-gradient font-semibold">закрытому тестированию</span>{" "}
-            и начните уже сейчас использовать ИИ технологии в вашем любимой деле.
-          </motion.p>
-
-          {/* Application Form */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-            viewport={{ once: true }}
-            className="apple-card-dark p-4 sm:p-6 lg:p-8 max-w-2xl mx-auto mb-8 sm:mb-10 lg:mb-12"
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.9, opacity: 0 }}
+            transition={{ type: "spring", duration: 0.5 }}
+            className="apple-card-dark p-4 sm:p-6 lg:p-8 max-w-2xl w-full relative"
+            onClick={(e) => e.stopPropagation()}
           >
+            {/* Close Button */}
+            <button
+              onClick={onClose}
+              className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors z-10"
+            >
+              <X className="w-6 h-6" />
+            </button>
+
             <div className="space-y-4 sm:space-y-6">
               <div className="text-center">
                 <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-gradient mb-3 sm:mb-4">
@@ -119,16 +112,16 @@ export function FinalCTASection() {
 
               <form onSubmit={handleSubmit} className="max-w-md mx-auto space-y-4 sm:space-y-6 mb-6 sm:mb-8 relative z-50" style={{ pointerEvents: 'auto' }}>
                 <div className="relative z-50" style={{ pointerEvents: 'auto' }}>
-                  <input
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="Ваше ФИО"
-                    required
-                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-blue-400 focus:bg-white/20 transition-all duration-300 relative z-50 text-sm sm:text-base"
-                    style={{ pointerEvents: 'auto', position: 'relative', zIndex: 50 }}
-                  />
-                </div>
+                   <input
+                     type="text"
+                     value={name}
+                     onChange={(e) => setName(e.target.value)}
+                     placeholder="Ваше ФИО"
+                     required
+                     className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-blue-400 focus:bg-white/20 transition-all duration-300 relative z-50 text-sm sm:text-base"
+                     style={{ pointerEvents: 'auto', position: 'relative', zIndex: 50 }}
+                   />
+                 </div>
                 
                 <div className="relative z-50" style={{ pointerEvents: 'auto' }}>
                   <input
@@ -205,8 +198,8 @@ export function FinalCTASection() {
                 {submitMessage && (
                   <div className={`text-center p-3 rounded-lg text-sm ${
                     submitMessage.includes('успешно') 
-                      ? 'bg-green-500/20 text-green-300 border border-green-500/30' 
-                      : 'bg-red-500/20 text-red-300 border border-red-500/30'
+                      ? 'bg-green-500/20 text-green-400 border border-green-500/30' 
+                      : 'bg-red-500/20 text-red-400 border border-red-500/30'
                   }`}>
                     {submitMessage}
                   </div>
@@ -237,18 +230,16 @@ export function FinalCTASection() {
               {/* Benefits List */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.4 }}
-                viewport={{ once: true }}
                 className="space-y-3 sm:space-y-4"
               >
                 {benefits.map((benefit, index) => (
                   <motion.div
                     key={index}
                     initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
+                    animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.5, delay: 0.5 + index * 0.1 }}
-                    viewport={{ once: true }}
                     className="flex items-center gap-2 sm:gap-3 text-gray-300"
                   >
                     <div className="flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center">
@@ -263,44 +254,7 @@ export function FinalCTASection() {
             </div>
           </motion.div>
         </motion.div>
-
-        {/* Trust Indicators */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          viewport={{ once: true }}
-          className="text-center"
-        >
-          <div className="glass-card-dark p-4 sm:p-6 max-w-4xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-              <div className="text-center">
-                <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4 shadow-lg floating">
-                  <CheckCircle className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
-                </div>
-                <h4 className="font-semibold text-white mb-1 sm:mb-2 text-sm sm:text-base">Без рисков</h4>
-                <p className="text-xs sm:text-sm text-gray-300">Отмените в любой момент</p>
-              </div>
-              
-              <div className="text-center">
-                <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4 shadow-lg floating" style={{ animationDelay: '0.5s' }}>
-                  <Shield className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
-                </div>
-                <h4 className="font-semibold text-white mb-1 sm:mb-2 text-sm sm:text-base">Безопасно</h4>
-                <p className="text-xs sm:text-sm text-gray-300">Защита данных по стандартам GDPR</p>
-              </div>
-              
-              <div className="text-center">
-                <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4 shadow-lg floating" style={{ animationDelay: '1s' }}>
-                  <Zap className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
-                </div>
-                <h4 className="font-semibold text-white mb-1 sm:mb-2 text-sm sm:text-base">Быстро</h4>
-                <p className="text-xs sm:text-sm text-gray-300">Запуск за 5 минут</p>
-              </div>
-            </div>
-          </div>
-        </motion.div>
-      </div>
-    </section>
+      )}
+    </AnimatePresence>
   );
 }

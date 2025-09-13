@@ -586,6 +586,28 @@ div[class*="glass-card"] svg[data-lucide="check-circle"] {
   background-clip: text;
 }
 
+/* Mobile responsive styles */
+@media (max-width: 639px) {
+  .mobile-title-part {
+    font-size: 4.5rem !important; /* 72px */
+    font-weight: 700 !important;
+    color: white !important;
+    line-height: 1.1 !important;
+    text-align: center !important;
+    display: block !important;
+    margin-bottom: 1.5rem !important;
+  }
+  
+  .mobile-highlight-text {
+    font-size: 5.5rem !important; /* 88px */
+    font-weight: 900 !important;
+    color: #ef4444 !important;
+    line-height: 1 !important;
+    display: block !important;
+    text-align: center !important;
+  }
+}
+
 /* Accessibility */
 @media (prefers-reduced-motion: reduce) {
   .smooth-bounce,

@@ -54,19 +54,19 @@ const features = [
 
 export function FeaturesSection() {
   return (
-    <section className="py-24 text-white relative overflow-hidden">
+    <section className="py-12 sm:py-16 lg:py-24 text-white relative overflow-hidden">
 
-      <div className="relative max-w-7xl mx-auto px-4">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-center mb-12 sm:mb-16"
         >
           <motion.h2 
-            className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6"
+            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 sm:mb-6"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
@@ -76,7 +76,7 @@ export function FeaturesSection() {
             <span className="text-gradient">CRM-систему?</span>
           </motion.h2>
           <motion.p 
-            className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed"
+            className="text-base sm:text-lg lg:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed px-4"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
@@ -89,7 +89,7 @@ export function FeaturesSection() {
 
 
         {/* Features Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {features.map((feature, index) => (
             <motion.div
               key={index}
@@ -97,20 +97,20 @@ export function FeaturesSection() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
               viewport={{ once: true }}
-              className="apple-card-dark p-8 hover:scale-105 transition-all duration-300 group relative overflow-hidden"
+              className="apple-card-dark p-4 sm:p-6 lg:p-8 hover:scale-105 transition-all duration-300 group relative overflow-hidden"
             >
               {/* Floating background elements */}
-              <div className="absolute -top-2 -right-2 w-20 h-20 bg-gradient-to-br from-white/5 to-transparent rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="absolute -top-2 -right-2 w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-white/5 to-transparent rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               
-              <div className={`w-16 h-16 bg-gradient-to-br ${feature.gradient} rounded-2xl flex items-center justify-center mb-6 shadow-lg floating group-hover:scale-110 transition-transform duration-300`} style={{ animationDelay: `${index * 0.3}s` }}>
-                <feature.icon className="w-8 h-8 text-white" />
+              <div className={`w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-gradient-to-br ${feature.gradient} rounded-2xl flex items-center justify-center mb-4 sm:mb-6 shadow-lg floating group-hover:scale-110 transition-transform duration-300`} style={{ animationDelay: `${index * 0.3}s` }}>
+                <feature.icon className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-white" />
               </div>
               
-              <h3 className="text-xl font-semibold mb-4 text-gradient group-hover:text-white transition-colors duration-300">
+              <h3 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 text-gradient group-hover:text-white transition-colors duration-300">
                 {feature.title}
               </h3>
               
-              <p className="text-gray-300 leading-relaxed group-hover:text-gray-200 transition-colors duration-300">
+              <p className="text-sm sm:text-base text-gray-300 leading-relaxed group-hover:text-gray-200 transition-colors duration-300">
                 {feature.description}
               </p>
 
